@@ -326,6 +326,7 @@ export default class Scroller {
    * @param  {Number} target   target relative to the scroller space (usually pixels, but can be angle)
    */
   tweenTo(duration, target) {
+    if (target == this.scrollObject[this.o.direction]) return;
     if (duration == 0) return this.setTo(target)
 
     //stop a tween if it is currently happening
