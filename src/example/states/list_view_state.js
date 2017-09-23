@@ -18,7 +18,8 @@ class ListViewState extends GameState {
     var boxH = 50
 
     var listView = new ListView(this.game, this.world, new Phaser.Rectangle(this.world.centerX - maskW/2, 120, maskW, 400), {
-      direction: 'y'
+      direction: 'y',
+      searchForClicks: true
     })
 
     for (var i = 0; i < 500; i++) {
@@ -32,6 +33,10 @@ class ListViewState extends GameState {
       let txt = this.game.add.text(boxW/2, h/2, i, {font: "40px Arial", fill: "#000"}, group)
       txt.anchor.set(.5)
       let img = this.game.add.image(0, 0, group.generateTexture())
+      // img.inputEnabled = true;
+      img.name = 'cell: ' + i.toString();
+      img.events.onInputDown.add((cell) => console.log("on down:" + cell.name));
+      img.events.onInputUp.add((cell) => console.log("on up:" + cell.name));
       listView.add(img, (cell) => console.log(cell.name))
     }
 
