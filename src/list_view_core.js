@@ -43,7 +43,7 @@ export default class ListViewCore {
    * this will take preference over height and width]
    * @param {DisplayObject} child
    */
-  add(child) {
+  add(child, onTurnToVisible) {
     this.items.push(child)
     let xy = 0
     if (this.grp.children.length > 0) {
@@ -54,8 +54,12 @@ export default class ListViewCore {
     this.grp.addChild(child)
     this.length = xy + child[this.p.wh]
 
+    child.visible = false;
+    child.onTurnToVisible = onTurnToVisible;
+
     this.setPosition(this.position)
     this.events.onAdded.dispatch(this.length - this.bounds[this.p.wh])
+
     return child
   }
 
@@ -101,12 +105,20 @@ export default class ListViewCore {
   cull() {
     for (var i = 0; i < this.items.length; i++) {
       let child = this.items[i]
-      child.visible = true
+      let newVisible = true;
+
       if (child[this.p.xy] + child[this.p.wh] + this.grp[this.p.xy] < this.bounds[this.p.xy]) {
-        child.visible = false
+        newVisible = false
       } else if (child[this.p.xy] + this.grp[this.p.xy] > this.bounds[this.p.xy] + this.bounds[this.p.wh]) {
-        child.visible = false
+        newVisible = false
       }
+
+      // view is on entering visible area, run callback
+      if (newVisible && newVisible != child.visible &&
+        'onTurnToVisible' in child && typeof child['onTurnToVisible'] === 'function') {
+        child.onTurnToVisible(child);
+      }
+      child.visible = newVisible
     }
   }
 

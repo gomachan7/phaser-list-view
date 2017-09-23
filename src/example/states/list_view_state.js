@@ -32,7 +32,7 @@ class ListViewState extends GameState {
       let txt = this.game.add.text(boxW/2, h/2, i, {font: "40px Arial", fill: "#000"}, group)
       txt.anchor.set(.5)
       let img = this.game.add.image(0, 0, group.generateTexture())
-      listView.add(img)
+      listView.add(img, (cell) => console.log(cell.name))
     }
 
     super.create()
