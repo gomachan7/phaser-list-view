@@ -1,4 +1,3 @@
-import forIn from 'lodash/forIn';
 import MathUtils from './utils/math_utils'
 import 'gsap'
 
@@ -75,9 +74,9 @@ export default class BasicSwiper {
       this.clickObject.events.onInputUp.remove(this.handleUp, this)
     }
 
-    forIn(this.events, (signal, key)=> {
-      signal.removeAll()
-    })
+    for (let key in this.events) {
+      this.events[key].removeAll()
+    }
   }
 
   destroy() {
